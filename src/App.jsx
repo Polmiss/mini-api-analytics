@@ -1,121 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from 'react'
+import { calculatePostsPerUser, calculateTodoStats, getTopCommentedPosts, averageTodosPerUser } from "./utils/analytics";
+import { getUsers, getPosts, getTodos, getComments } from './api/api';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [todos,setTodos] = useState([]);
+  const [comments, setComments] = useState([]);
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+  const[postsPerUser, setPostsPerUser] = useState([]);
+  const[todoStats, setTodoStats] = useState({completed: 0, notCompleted: 0});
+  const[topCommentedPosts, setTopCommentedPosts] = useState([]);
+  const[averageTodos, setAverageTodos] = useState(0);
 
-      <div className="ticks"></div>
+  useEffect(() => {
+    const fetchData = async () => {
+      const usersData = await getUsers();
+      const postsData = await getPosts();
+      const todosData = await getTodos();
+      const commentsData = await getComments();
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      setUsers(usersData);
+      setPosts(postsData);
+      setTodos(todosData);
+      setComments(commentsData);
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      setPostsPerUser(calculatePostsPerUser(usersData, postsData));
+      setTodoStats(calculateTodoStats(todosData));
+      setTopCommentedPosts(getTopCommentedPosts(commentsData, 5));
+      setAverageTodos(averageTodosPerUser(usersData, todosData));
+    };
+
+
+    fetchData();
+  }, []);
+
+
+
+
+return (
+    <div className="App">
+      <h1>Mini API Analytics</h1>
+      
+      <h2>Top Commented Posts</h2>
+      <ul>
+        {topCommentedPosts.map(topPost => {
+          const post = posts.find(p => p.id === topPost.postId);
+          return (
+            <li key={topPost.postId}>
+              {post.title} - {topPost.comments} komentarzy
+            </li>
+          );
+        })}
+      </ul>
+
+      <p>Srednia todos na uzytkownika: {averageTodos}</p>
+    </div>
   )
 }
 
-export default App
+export default App;

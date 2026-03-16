@@ -36,14 +36,14 @@ export function howManyTodosCompleted(todos) {
     return result;
 }
 
-export function getTopCommentedPosts(posts, comments) {
+export function getTopCommentedPosts(comments, howMany) {
     let postsCommentsCounter = new Map();
 
     for(let i = 0; i < comments.length; i++) {
         postsCommentsCounter.set(comments[i].postId, (postsCommentsCounter.get(comments[i].postId) || 0) + 1);
     }
 
-    const topCommentedPosts = [...postsCommentsCounter.entries()].sort((a, b) => b[1] - a[1]).map(([postId, comments]) => ({ postId, comments }));
+    const topCommentedPosts = [...postsCommentsCounter.entries()].sort((a, b) => b[1] - a[1]).slice(0, howMany).map(([postId, comments]) => ({ postId, comments }));
 
     return topCommentedPosts;
 }
