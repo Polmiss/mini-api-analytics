@@ -1,16 +1,75 @@
-# React + Vite
+# Mini API Analytics
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Opis projektu
 
-Currently, two official plugins are available:
+Aplikacja webowa stworzona w React, która pobiera dane z publicznego API:
+[JSONPlaceholder API](https://jsonplaceholder.typicode.com)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Na podstawie tych danych obliczane są proste statystyki dotyczące aktywności użytkowników, a następnie wizualizowane za pomocą wykresów.
 
-## React Compiler
+Projekt został zbudowany przy użyciu Vite i wykorzystuje bibliotekę Chart.js do tworzenia wykresów.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technologie
 
-## Expanding the ESLint configuration
+- React
+- Vite
+- JavaScript
+- Chart.js
+- GitHub Pages (deploy)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Metryki
+
+Aplikacja oblicza następujące statystyki:
+
+- liczba postów na użytkownika
+- procent wykonanych i niewykonanych TODO
+- top 5 najbardziej komentowanych postów
+- średnia liczba TODO na użytkownika
+
+## Wizualizacje
+
+W aplikacji wykorzystano dwa typy wykresów:
+
+- wykres słupkowy – liczba postów na użytkownika
+- wykres kołowy – procent wykonanych i niewykonanych TODO
+
+## Zrzut ekranu
+
+![Screenshot](screenshot.png)
+
+## Uruchomienie projektu
+
+Instalacja zależności:
+```bash
+npm install
+```
+
+Uruchomienie projektu lokalnie:
+```bash
+npm run dev
+```
+
+Build produkcyjny:
+```bash
+npm run build
+```
+
+## Demo
+
+Aplikacja jest dostępna pod adresem:
+
+https://polmiss.github.io/mini-api-analytics/
+
+## Użycie AI
+
+Podczas tworzenia projektu korzystałem z ChatGPT jako narzędzia wspomagającego. AI pomogło między innymi w:
+
+- wyjaśnieniu działania React (useState, useEffect),
+- zaproponowaniu struktury projektu React,
+- analizie i poprawie napisanego przeze mnie kodu (szczególnie w pliku analytics.js),
+- generowaniu przykładowego kodu do wykresów z użyciem Chart.js,
+- wygenerowaniu struktury JSX w komponencie App.jsx,
+- poprawieniu kodu odpowiedzialnego za pobieranie danych z API,
+- pomocy przy wdrożeniu aplikacji na GitHub Pages,
+- sprawdzeniu czy projekt spełnia wymagania zadania,
+- uporządkowaniu moich pomysłów i wygenerowaniu spójnego pliku README na ich podstawie.
