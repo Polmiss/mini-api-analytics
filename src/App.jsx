@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
+import './styles/App.css'
 import { calculatePostsPerUser, calculateTodoStats, getTopCommentedPosts, averageTodosPerUser } from "./utils/analytics";
 import { getUsers, getPosts, getTodos, getComments } from './api/api';
+import PostsChart from "./components/PostsChart";
+import TodoChart from "./components/TodoChart";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -42,7 +45,7 @@ return (
     <div className="App">
       <h1>Mini API Analytics</h1>
       
-      <h2>Top Commented Posts</h2>
+      <h2>Najbardziej komentowane posty</h2>
       <ul>
         {topCommentedPosts.map(topPost => {
           const post = posts.find(p => p.id === topPost.postId);
@@ -55,6 +58,11 @@ return (
       </ul>
 
       <p>Srednia todos na uzytkownika: {averageTodos}</p>
+      <h2>Posty na uzytkownika:</h2>
+      <PostsChart data={postsPerUser} />
+
+      <h2>Status wykonia todos</h2>
+      <TodoChart data={todoStats} />
     </div>
   )
 }
